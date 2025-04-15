@@ -1,11 +1,18 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
+import os
 
-class DatabaseHandler:
-    def __init__(self, db_config):
+class ConnectionHandler:
+    def __init__(self):
         self.connection = None
         self.cursor = None
-        self.db_config = db_config
+        self.db_config = {
+            os.getenv("DB_HOST"): os.getenv("DB_HOST"),
+            os.getenv("DB_NAME"): os.getenv("DB_NAME"),
+            os.getenv("DB_USER"): os.getenv("DB_USER"),
+            os.getenv("DB_PASSWORD"): os.getenv("DB_PASSWORD")
+        }
 
     def connect(self):
         try:
