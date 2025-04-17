@@ -5,14 +5,26 @@ import os
 
 class ConnectionHandler:
     def __init__(self):
-        self.connection = None
-        self.cursor = None
-        self.db_config = {
-            os.getenv("DB_HOST"): os.getenv("DB_HOST"),
-            os.getenv("DB_NAME"): os.getenv("DB_NAME"),
-            os.getenv("DB_USER"): os.getenv("DB_USER"),
-            os.getenv("DB_PASSWORD"): os.getenv("DB_PASSWORD")
-        }
+
+        try:
+            success = load_dotenv()
+            if not success:
+                raise EnvironmentError("Failed to load environment variables from .env file.")
+            
+            self.connection = None
+            self.cursor = None
+            self.db_config = {
+                "host": os.getenv("DB_HOST"),
+                "dbname": os.getenv("DB_NAME"),
+                "user": os.getenv("DB_USER"),
+                "password": os.getenv("DB_PASSWORD")
+            }
+        except Exception as e:
+            print("Error loading environment variables from .env file.", e)
+           
+       
+
+
 
     def connect(self):
         try:

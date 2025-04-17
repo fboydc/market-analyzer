@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from typing import Optional
+from src.db.events_db_manager import event_model
 import datetime
 """
 Description:
@@ -88,11 +89,12 @@ class EconomicEventsScraper:
             try:
                 event = {
                     "event_time": cols[0].text.strip(),
-                    "country": cols[1].text.strip(),
+                    "event_country": cols[1].text.strip(),
                     "ranking": self.parse_importance(cols[2]),
-                    "event": cols[3].text.strip(),
-                    "actual": cols[4].text.strip(),
-                    "market_exp": cols[5].text.strip(),
+                    "event_date": datetime.datetime.now().date(),  # Using current date for all events
+                    "event_name": cols[3].text.strip(),
+                    "actual_value": cols[4].text.strip(),
+                    "forecast_value": cols[5].text.strip(),
                 }
                 events.append(event)
             except Exception as e:
@@ -106,11 +108,16 @@ class EconomicEventsScraper:
         importance = len(icons)
         return importance
     
-    def save_events(self, events):
-        # Placeholder for saving the parsed events to a database or file
-        print(events)
+    def save_events(self, events: list):
+        # Placeholder for saving the parsed events to a database or 
+        em = event_model()
+        em.connect()
 
-    def run(self, debug: bool = False):
+        em.insert_many(events)
+       # print(events)
+
+
+    def run(self, debug: bool = True):
         if debug == True:
             raw_html = self.fetch_mock_html() # fetch html directly from sample file
         else:
@@ -121,4 +128,4 @@ class EconomicEventsScraper:
 
 if __name__ == "__main__":
     scraper = EconomicEventsScraper()
-    scraper.run(debug=True)
+    scraper.run()

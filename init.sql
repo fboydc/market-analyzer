@@ -11,11 +11,12 @@ WITH
 CREATE TABLE IF NOT EXISTS "events" (
     "id" SERIAL PRIMARY KEY,
     "event_name" VARCHAR(255) NOT NULL,
+    "event_time" VARCHAR(255) NOT NULL,
     "event_date" DATE NOT NULL,
     "ranking" INT NOT NULL,
     "country" VARCHAR(50) NOT NULL,
-    "actual_value" NUMERIC(10, 2) NOT NULL,
-    "forecast_value" NUMERIC(10, 2) NOT NULL
+    "actual_value" VARCHAR(50) NOT NULL,
+    "forecast_value" VARCHAR(50) NOT NULL
 );
 
 
